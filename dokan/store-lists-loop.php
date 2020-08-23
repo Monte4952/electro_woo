@@ -15,6 +15,7 @@
                     $store_info        = dokan_get_store_info( $seller->ID );
                     $store_address     = dokan_get_seller_short_address( $seller->ID );
                     $store_banner_url  = $store_banner_id ? wp_get_attachment_image_src( $store_banner_id, $image_size ) : DOKAN_PLUGIN_ASSEST . '/images/default-store-banner.png';
+                    // echo '<pre>' . print_r( $store_info, 1 ) . '</pre>';
                     ?>
 
                     <li class="dokan-single-seller woocommerce coloum-<?php echo esc_attr( $per_row ); ?>">
@@ -44,9 +45,6 @@
                                     <h2><a href="<?php echo esc_attr( $store_url ); ?>">
                                         <?php echo !empty( $store_name ) ? esc_html( $store_name ) : esc_html__( 'Visit Store', 'electro' ); ?>
                                     </a></h2>
-                                </div>
-                                <div style="display: none !important;">
-                                    <?php do_action( 'dokan_seller_listing_footer_content', $seller, $store_info ); ?>
                                 </div>
                             <?php elseif( $store_list_style === 'style-v2'  ) : ?>
                                 <?php
@@ -98,9 +96,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div style="display: none !important;">
-                                    <?php do_action( 'dokan_seller_listing_footer_content', $seller, $store_info ); ?>
-                                </div>
                             <?php elseif( $store_list_style === 'style-v3'  ) : ?>
                                 <?php
                                 $products = dokan()->product->latest( array(
@@ -140,9 +135,6 @@
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <div style="display: none !important;">
-                                    <?php do_action( 'dokan_seller_listing_footer_content', $seller, $store_info ); ?>
-                                </div>
                             <?php elseif( $store_list_style === 'style-v4'  ) : ?>
                                 <?php
                                 $products = dokan()->product->latest( array(
@@ -173,10 +165,10 @@
                                             </div>
                                         </div>
                                         <div class="store-data">
-                                            <?php if( electro_dokan_store_follow_exists() ) : ?>
+                                            <?php if( is_dokan_pro_activated() && class_exists( 'Dokan_Follow_Store_Follow_Button' ) ) : ?>
                                                 <?php
                                                 $follow_button = new Dokan_Follow_Store_Follow_Button();
-                                                electro_remove_class_action( 'dokan_after_store_tabs', 'Dokan_Follow_Store_Follow_Button', 'add_follow_button_after_store_tabs', 99 );
+                                                remove_all_actions( 'dokan_after_store_tabs', 99 );
                                                 ?>
 
                                                 <div class="dokan-store-follow-store-button-container dokan-store-follow-store-btn-wrap">
@@ -218,9 +210,6 @@
                                         <?php endif; ?>
                                     </div>
                                 </div>
-                                <div style="display: none !important;">
-                                    <?php do_action( 'dokan_seller_listing_footer_content', $seller, $store_info ); ?>
-                                </div>
                             <?php elseif( $store_list_style === 'style-v5'  ) : ?>
                                 <div class="dokan-single-seller__outter">
                                     <div class="dokan-single-seller__inner">
@@ -250,10 +239,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <?php if( electro_dokan_store_follow_exists() ) : ?>
+                                        <?php if( is_dokan_pro_activated() && class_exists( 'Dokan_Follow_Store_Follow_Button' ) ) : ?>
                                             <?php
                                             $follow_button = new Dokan_Follow_Store_Follow_Button();
-                                            electro_remove_class_action( 'dokan_after_store_tabs', 'Dokan_Follow_Store_Follow_Button', 'add_follow_button_after_store_tabs', 99 );
+                                            remove_all_actions( 'dokan_after_store_tabs', 99 );
                                             ?>
 
                                             <div class="dokan-store-follow-store-button-container dokan-store-follow-store-btn-wrap">
@@ -261,9 +250,6 @@
                                             </div>
                                         <?php endif ?>
                                     </div>
-                                </div>
-                                <div style="display: none !important;">
-                                    <?php do_action( 'dokan_seller_listing_footer_content', $seller, $store_info ); ?>
                                 </div>
                             <?php endif; ?>
                         <?php else : ?>

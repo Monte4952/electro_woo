@@ -33,8 +33,6 @@
 </div><!-- #page -->
 </div>
 
-<?php do_action( 'electro_after_page' ); ?>
-
 <?php wp_footer(); ?>
 
 </body>

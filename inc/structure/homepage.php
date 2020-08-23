@@ -335,12 +335,7 @@ if ( ! function_exists( 'electro_onsale_product' ) ) {
 
 			$args 		= wp_parse_args( array( 'per_page'	=> 1 ), $args );
 			$args 		= apply_filters( 'electro_onsale_product_args', wp_parse_args( $args, $defaults ) );
-
-			if ( isset( $args['post__in'] ) ) {
-				$products 	= Electro_Products::products( $args );
-			} else {
-				$products 	= Electro_Products::sale_products( $args );
-			}
+			$products 	= Electro_Products::sale_products( $args );
 
 			extract( $args );
 
@@ -505,11 +500,7 @@ if ( ! function_exists( 'electro_onsale_product_carousel' ) ) {
 				}
 			}
 
-			if ( isset( $args['post__in'] ) ) {
-				$products 	= Electro_Products::products( $args );
-			} else {
-				$products 	= Electro_Products::sale_products( $args );
-			}
+			$products 	= Electro_Products::sale_products( $args );
 
 			extract( $section_args );
 
@@ -664,12 +655,7 @@ if ( ! function_exists( 'electro_onsale_product_carousel_v5' ) ) {
 				}
 			}
 
-			if ( isset( $args['post__in'] ) ) {
-				$products 	= Electro_Products::products( $args );
-			} else {
-				$products 	= Electro_Products::sale_products( $args );
-			}
-
+			$products 	= Electro_Products::sale_products( $args );
 
 			extract( $section_args );
 

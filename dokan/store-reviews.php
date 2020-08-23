@@ -37,7 +37,7 @@ $map_location = isset( $store_info['location'] ) ? esc_attr( $store_info['locati
         } ?>
 
         <?php
-        $dokan_template_reviews = version_compare( dokan_pro()->version, '3.0.0' , '<' ) ? Dokan_Pro_Reviews::init() : dokan_pro()->review;
+        $dokan_template_reviews = Dokan_Pro_Reviews::init();
         $id                     = $store_user->ID;
         $post_type              = 'product';
         $limit                  = 20;
