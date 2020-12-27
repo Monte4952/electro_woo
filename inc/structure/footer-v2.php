@@ -88,23 +88,12 @@ if ( ! function_exists( 'electro_footer_bottom_widgets_v2' ) ) {
                     <?php if ( $show_footer_contact_block ) : ?>
                         <div class="footer-contact">
                             <?php electro_footer_contact(); ?>
-                             
                         </div>
                     <?php endif; ?>
                     <?php if ( $show_footer_bottom_widgets ) : ?>
-                           <div class="footer-bottom-widgets-menu">
-                            <div class="footer-bottom-widgets-menu-inner">
+                        <div class="footer-bottom-widgets-menu">
+                            <div class="footer-bottom-widgets-menu-inner <?php echo esc_attr( 'columns-' . $footer_bottom_widgets_columns ); ?>">
                                 <?php electro_display_footer_bottom_widgets(); ?>
-                               <div class="columns">
-                                <aside id="nav_menu-3" class="widget clearfix widget_nav_menu">
-                                <div class="body">
-                                      <div class='col-md-9'>
-                                      <a href="https://play.google.com/store/apps" target="_blank"><img style="background-color: #FF6C37; border-radius: 9px" class="FooterNew-appStoreIcon-image" src="/app-store-badge.svg" alt="Apple App Store Badge"></a><br><br>
-                                      <a href="https://www.apple.com/ios/app-store/"target="_blank"><img style="background-color: #FF6C37;border-radius: 9px;" class="FooterNew-appStoreIcon-image" src="/google-play-badge.svg" alt="Google Play Store Badge"></a>
-                                      </div>
-                                </div>
-                                </aside>
-                                </div>
                             </div>
                         </div>
                     <?php endif; ?>
