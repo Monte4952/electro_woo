@@ -69,8 +69,8 @@ if ( ! function_exists( 'electro_enqueue_scripts' ) ) {
 
         global $electro_version;
 
-        wp_enqueue_script( 'tether-js',     get_template_directory_uri() . '/assets/js/tether.min.js', array( 'jquery' ), $electro_version, true );
-        wp_enqueue_script( 'bootstrap-js',  get_template_directory_uri() . '/assets/js/bootstrap.min.js', array( 'jquery', 'tether-js' ), $electro_version, true );
+        //wp_enqueue_script( 'tether-js',     get_template_directory_uri() . '/assets/js/tether.min.js', array( 'jquery' ), $electro_version, true );
+        wp_enqueue_script( 'bootstrap-js',  get_template_directory_uri() . '/assets/js/bootstrap.bundle.min.js', array( 'jquery' ), $electro_version, true );
 
         $waypoints_js_handler = function_exists( 'is_elementor_activated' ) && is_elementor_activated() ? 'elementor-waypoints' : 'waypoints-js';
         wp_enqueue_script( $waypoints_js_handler,   get_template_directory_uri() . '/assets/js/jquery.waypoints.min.js', array( 'jquery' ), $electro_version, true );
@@ -151,35 +151,14 @@ if ( ! function_exists( 'electro_fonts_url' ) ) {
     function electro_fonts_url() {
 
         $fonts_url = '';
-        $fonts     = array();
-        $subsets   = 'latin,latin-ext';
 
-        /* translators: If there are characters in your language that are not supported by Open Sans, translate this to 'off'. Do not translate into your own language. */
-        if ( 'off' !== esc_html_x( 'on', 'Open Sans font: on or off', 'electro' ) ) {
-            $fonts[] =  'Open Sans:400,300,600,700,800,800italic,700italic,600italic,400italic,300italic';
+        if ( apply_filters( 'electro/enable_inter', true ) ) {
+            $fonts_url = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap';
+        } else {
+            $fonts_url = 'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap';
         }
 
-        $fonts = apply_filters( 'electro_google_fonts', $fonts );
-
-        /* translators: To add an additional character subset specific to your language, translate this to 'greek', 'cyrillic', 'devanagari' or 'vietnamese'. Do not translate into your own language. */
-        $subset = esc_html_x( 'no-subset', 'Add new subset (greek, cyrillic, devanagari, vietnamese)', 'electro' );
-
-        if ( 'cyrillic' == $subset ) {
-            $subsets .= ',cyrillic,cyrillic-ext';
-        } elseif ( 'greek' == $subset ) {
-            $subsets .= ',greek,greek-ext';
-        } elseif ( 'devanagari' == $subset ) {
-            $subsets .= ',devanagari';
-        } elseif ( 'vietnamese' == $subset ) {
-            $subsets .= ',vietnamese';
-        }
-
-        if ( $fonts ) {
-            $fonts_url = add_query_arg( array(
-                'family' => urlencode( implode( '|', $fonts ) ),
-                'subset' => urlencode( $subsets ),
-            ), '//fonts.googleapis.com/css' );
-        }
+        $fonts_url = apply_filters( 'electro_google_fonts', $fonts_url );
 
         return $fonts_url;
     }
@@ -379,6 +358,98 @@ if ( ! function_exists( 'electro_top_bar_v2' ) ) {
     }
 }
 
+if ( ! function_exists( 'electro_top_bar_v3' ) ) {
+    /**
+     * Displays Top Bar v3
+     */
+    function electro_top_bar_v3() {
+
+        $top_bar_classes = 'top-bar top-bar-v3';
+
+        if ( apply_filters( 'electro_enable_top_bar', true ) ) :
+            if ( has_electro_mobile_header() ) {
+                if ( apply_filters( 'electro_hide_top_bar_in_mobile', true ) ) {
+                    $top_bar_classes .= ' hidden-lg-down';
+                }
+            }
+
+            $enable_topbar_additional_links = apply_filters( 'electro_enable_top_bar_v3_additional_links', true );
+            ?>
+            <div class="<?php echo esc_attr( $top_bar_classes ); ?>">
+                <div class="container">
+                    <?php if ( $enable_topbar_additional_links ) {
+                        $topbar_additional_links_title = apply_filters( 'electro_top_bar_v3_additional_links_title', __( 'Two Shops<br>One Shipment', 'electro' ) );
+
+                        $topbar_additional_link_1_text = apply_filters( 'electro_top_bar_v3_additional_link_1_text', esc_html__( 'Electronics', 'electro' ) );
+                        $topbar_additional_link_1_url = apply_filters( 'electro_top_bar_v3_additional_link_1_url', '#' );
+                        $topbar_additional_link_1_image = apply_filters( 'electro_top_bar_v3_additional_link_1_image', '' );
+
+                        $topbar_additional_link_2_text = apply_filters( 'electro_top_bar_v3_additional_link_2_text', esc_html__( 'Power Tools', 'electro' ) );
+                        $topbar_additional_link_2_url = apply_filters( 'electro_top_bar_v3_additional_link_2_url', '#' );
+                        $topbar_additional_link_2_image = apply_filters( 'electro_top_bar_v3_additional_link_2_image', '' );
+
+                        if( ! empty( $topbar_additional_links_title ) ) {
+                            ?><span class="additional-links-label"><?php echo wp_kses_post( $topbar_additional_links_title ); ?></span><?php
+                        }
+                        if( ( ! empty( $topbar_additional_link_1_text ) && ! empty( $topbar_additional_link_1_url ) ) || ( ! empty( $topbar_additional_link_2_text ) && ! empty( $topbar_additional_link_2_url ) ) ) {
+                            ?><ul class="additional-links pull-left"><?php
+                                if( ( ! empty( $topbar_additional_link_1_text ) && ! empty( $topbar_additional_link_1_url ) ) ) {
+                                    ?>
+                                    <li class="additional-item">
+                                        <a class="additional-item-link" href="<?php echo esc_attr( $topbar_additional_link_1_url ); ?>">
+                                            <?php if ( ! empty( $topbar_additional_link_1_image ) && $topbar_additional_link_1_image > 0 ) {
+                                                echo wp_get_attachment_image( $topbar_additional_link_1_image, array( '30', '30' ), false, array( "class" => "img-fluid" ) );
+                                            } ?>
+                                            <span class="additional-item-label"><?php echo wp_kses_post( $topbar_additional_link_1_text ); ?></span>
+                                        </a>
+                                    </li>
+                                    <?php
+                                }
+
+                                if( ( ! empty( $topbar_additional_link_2_text ) && ! empty( $topbar_additional_link_2_url ) ) ) {
+                                    ?>
+                                    <li class="additional-item">
+                                        <a class="additional-item-link" href="<?php echo esc_attr( $topbar_additional_link_2_url ); ?>">
+                                            <?php if ( ! empty( $topbar_additional_link_2_image ) && $topbar_additional_link_2_image > 0 ) {
+                                                echo wp_get_attachment_image( $topbar_additional_link_2_image, array( '30', '30' ), false, array( "class" => "img-fluid" ) );
+                                            } ?>
+                                            <span class="additional-item-label"><?php echo wp_kses_post( $topbar_additional_link_2_text ); ?></span>
+                                        </a>
+                                    </li>
+                                    <?php
+                                }
+                            ?></ul><?php
+                        }
+                    } ?>
+
+                    <?php
+                    wp_nav_menu( array(
+                        'theme_location'    => 'header-support',
+                        'container'         => false,
+                        'depth'             => 2,
+                        'menu_class'        => 'nav nav-inline pull-left electro-animate-dropdown flip',
+                        'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+                        'walker'            => new wp_bootstrap_navwalker()
+                    ) );
+                    ?>
+
+                    <?php
+                    wp_nav_menu( array(
+                        'theme_location'    => 'topbar-right',
+                        'container'         => false,
+                        'depth'             => 2,
+                        'menu_class'        => 'nav nav-inline pull-right electro-animate-dropdown flip',
+                        'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+                        'walker'            => new wp_bootstrap_navwalker()
+                    ) );
+                    ?>
+                </div>
+            </div><!-- /.top-bar-v3 -->
+
+        <?php endif;
+    }
+}
+
 if ( ! function_exists( 'electro_container_wrap_start' ) ) {
     /**
      * Prints Electro container wrapper
@@ -409,11 +480,11 @@ if ( ! function_exists ( 'electro_header_logo' ) ) {
     function electro_header_logo() {
 
         $header_logo_src = apply_filters( 'electro_header_logo_src', get_template_directory_uri() . '/assets/images/logo.png' );
-        
+
         if ( ! empty( $header_logo_src ) ) {
 
             ob_start();
-            
+
             if ( function_exists( 'the_custom_logo' ) && has_custom_logo() ) {
                 the_custom_logo();
             } else { ?>

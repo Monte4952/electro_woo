@@ -5,22 +5,6 @@
  * @package electro
  */
 
-/**
- * Assign the Electro version to a var
- */
-$theme 				= wp_get_theme();
-$electro_version 	= $theme['Version'];
-
-/**
- * Set the content width based on the theme's design and stylesheet.
- *
- * @see mc_content_width()
- *
- */
-if ( ! isset( $content_width ) ) {
-	$content_width = 1170; /* pixels */
-}
-
 if ( ! function_exists( 'electro_content_width' ) ) {
 	/**
 	 * Adjust content_width value for image attachment template.
@@ -167,6 +151,7 @@ if ( ! function_exists( 'electro_register_nav_menus' ) ) {
 			'all-departments-menu'			=> esc_html__( 'All Departments Menu', 'electro' ),
 			'blog-menu'						=> esc_html__( 'Blog Menu', 'electro' ),
 			'mobile-handheld-department'	=> esc_html__( 'Mobile Handheld Department', 'electro' ),
+			'header-v9-navbar'				=> esc_html__( 'Header v9 Navbar', 'electro' ),
 		) );
 
 		$handheld_menus = array(
@@ -296,7 +281,7 @@ if ( ! function_exists( 'electro_register_widgets' ) ) {
 		include_once get_template_directory() . '/inc/widgets/class-electro-posts-carousel-widget.php';
 		register_widget( 'Electro_Posts_Carousel_Widget' );
 
-		if ( is_woocommerce_activated() ) {
+		if ( apply_filters( 'electro/woocommerce/enable_widgets', true ) && is_woocommerce_activated() ) {
 
 			// Electro Display Product Filter Widget
 			include_once get_template_directory() . '/inc/widgets/class-electro-product-filter-widget.php';
@@ -371,16 +356,6 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 		$plugins = apply_filters( 'ec_tgmpa_plugins', array(
 
 			array(
-				'name'					=> 'Contact Form by WPForms',
-				'slug'					=> 'wpforms-lite',
-				'required'				=> false,
-				'version'				=> '1.5.9.1',
-				'force_activation'		=> false,
-				'force_deactivation'	=> false,
-				'external_url'			=> '',
-			),
-
-			array(
 				'name'					=> 'Electro Extensions',
 				'slug'					=> 'electro-extensions',
 				'source'				=> 'https://transvelo.github.io/electro/assets/plugins/electro-extensions.zip',
@@ -396,17 +371,37 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'slug'					=> 'envato-market',
 				'source'				=> 'https://envato.github.io/wp-envato-market/dist/envato-market.zip',
 				'required'				=> false,
-				'version'				=> '2.0.3',
+				'version'				=> '2.0.6',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
 			),
 
 			array(
+                'name'                  => 'MAS Brands for WooCommerce',
+                'slug'                  => 'mas-woocommerce-brands',
+                'required'              => false,
+                'version'               => '1.0.4',
+                'force_activation'      => false,
+                'force_deactivation'    => false,
+                'external_url'          => '',
+            ),
+
+            array(
+                'name'                  => 'MAS Static Content',
+                'slug'                  => 'mas-static-content',
+                'required'              => false,
+                'version'               => '1.0.3',
+                'force_activation'      => false,
+                'force_deactivation'    => false,
+                'external_url'          => '',
+            ),
+
+			array(
 				'name'					=> 'One Click Demo Import',
 				'slug'					=> 'one-click-demo-import',
 				'required'				=> false,
-				'version'				=> '2.5.2',
+				'version'				=> '2.6.1',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
@@ -416,17 +411,7 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'name'					=> 'Redux Framework',
 				'slug'					=> 'redux-framework',
 				'required'				=> false,
-				'version'				=> '3.6.17',
-				'force_activation'		=> false,
-				'force_deactivation'	=> false,
-				'external_url'			=> '',
-			),
-
-			array(
-				'name'					=> 'Regenerate Thumbnails',
-				'slug'					=> 'regenerate-thumbnails',
-				'required'				=> false,
-				'version'				=> '3.1.3',
+				'version'				=> '4.1.24',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
@@ -437,7 +422,7 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'slug'					=> 'revslider',
 				'source'				=> 'https://transvelo.github.io/included-plugins/revslider.zip',
 				'required'				=> false,
-				'version'				=> '6.1.7',
+				'version'				=> '6.3.3',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
@@ -447,18 +432,28 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'name'					=> 'WooCommerce',
 				'slug'					=> 'woocommerce',
 				'required'				=> false,
-				'version'				=> '4.0.0',
+				'version'				=> '4.8.0',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
 			),
 
 			array(
-				'name'					=> 'WPBakery Visual Composer',
+				'name'					=> 'WPBakery Page Builder',
 				'slug'					=> 'js_composer',
 				'source'				=> 'https://transvelo.github.io/included-plugins/js_composer.zip',
 				'required'				=> false,
-				'version'				=> '6.1',
+				'version'				=> '6.5.0',
+				'force_activation'		=> false,
+				'force_deactivation'	=> false,
+				'external_url'			=> '',
+			),
+
+			array(
+				'name'					=> 'WPForms Lite',
+				'slug'					=> 'wpforms-lite',
+				'required'				=> false,
+				'version'				=> '1.6.4',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'external_url'			=> '',
@@ -468,7 +463,7 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'name'					=> 'YITH Woocommerce Compare',
 				'slug'					=> 'yith-woocommerce-compare',
 				'required'				=> false,
-				'version'				=> '2.3.19',
+				'version'				=> '2.4.3',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'is_callable'			=> array( 'YITH_Woocompare', 'is_frontend' ),
@@ -479,7 +474,7 @@ if ( ! function_exists( 'electro_register_required_plugins' ) ) {
 				'name'					=> 'YITH WooCommerce Wishlist',
 				'slug'					=> 'yith-woocommerce-wishlist',
 				'required'				=> false,
-				'version'				=> '3.0.9',
+				'version'				=> '3.0.17',
 				'force_activation'		=> false,
 				'force_deactivation'	=> false,
 				'is_callable'			=> array( 'YITH_WCWL', 'get_instance' ),
